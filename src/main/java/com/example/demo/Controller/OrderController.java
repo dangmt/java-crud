@@ -47,7 +47,6 @@ public class OrderController {
             orderItem.setQuantity(cartItem.getQuantity());
             order.getOrderItems().add(orderItem);
 
-            cartItemRepository.delete(cartItem);
         }
 
         return ResponseEntity.ok("Order created successfully");
