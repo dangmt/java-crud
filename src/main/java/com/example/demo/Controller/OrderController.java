@@ -3,12 +3,15 @@ package com.example.demo.Controller;
 import java.util.List;
 
 import org.springframework.http.ResponseEntity;
+import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.example.demo.Models.CartItem;
@@ -30,7 +33,13 @@ public class OrderController {
         this.cartItemRepository = cartItemRepository;
     }
 
-    @PostMapping("/orders")
+    @GetMapping({ "orders/", "orders" })
+    public ResponseEntity<List<Order>> getAllOrders() {
+        List<Order> orders = orderRepository.findAll();
+        return ResponseEntity.ok(orders);
+    }
+
+    @PostMapping("orders")
     @Transactional
     public ResponseEntity<?> createOrder() {
         // Create a new order
@@ -46,7 +55,6 @@ public class OrderController {
             orderItem.setProduct(cartItem.getProduct());
             orderItem.setQuantity(cartItem.getQuantity());
             order.getOrderItems().add(orderItem);
-
         }
 
         return ResponseEntity.ok("Order created successfully");
@@ -63,7 +71,7 @@ public class OrderController {
 
     @PutMapping("orders/{orderId}")
     @Transactional
-    public ResponseEntity<?> updateOrder(@PathVariable Long orderId, @RequestBody Order updatedOrder) {
+    public ResponseEntity<?> updateOrder(@PathVariable Long orderId) {
         Order existingOrder = orderRepository.findById(orderId).orElse(null);
         if (existingOrder == null) {
             return ResponseEntity.notFound().build();
@@ -93,9 +101,4 @@ public class OrderController {
         return ResponseEntity.ok("Order deleted successfully");
     }
 
-    @GetMapping("/orders")
-    public ResponseEntity<List<Order>> getAllOrders() {
-        List<Order> orders = orderRepository.findAll();
-        return ResponseEntity.ok(orders);
-    }
 }

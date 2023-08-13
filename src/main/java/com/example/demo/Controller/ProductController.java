@@ -40,7 +40,7 @@ public class ProductController {
         return ResponseEntity.status(HttpStatus.CREATED).body("Product created successfully");
     }
 
-    @GetMapping("/products")
+    @GetMapping({ "/products", "products/" })
     public ResponseEntity<?> getAllProducts() {
 
         List<Product> products = productRepository.findAll();

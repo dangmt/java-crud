@@ -79,7 +79,7 @@ public class CartItemController {
         return ResponseEntity.ok().build();
     }
 
-    @GetMapping("/cartitems")
+    @GetMapping({ "/cartitems", "cartitems/" })
     public ResponseEntity<List<CartItem>> getAllCartItems() {
         List<CartItem> cartItems = cartItemRepository.findAll();
         return ResponseEntity.ok(cartItems);
