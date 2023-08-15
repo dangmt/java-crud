@@ -2,6 +2,7 @@ package com.example.demo.Controller;
 
 import java.util.List;
 
+import org.springframework.data.repository.CrudRepository;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -14,6 +15,7 @@ import com.example.demo.Models.CartItem;
 import com.example.demo.Models.Order;
 import com.example.demo.Models.OrderItem;
 import com.example.demo.Repository.CartItemRepository;
+import com.example.demo.Repository.OrderItemRepository;
 import com.example.demo.Repository.OrderRepository;
 
 import jakarta.transaction.Transactional;
@@ -23,10 +25,13 @@ public class OrderController {
 
     private final OrderRepository orderRepository;
     private final CartItemRepository cartItemRepository;
+    private final OrderItemRepository orderItemRepository;
 
-    public OrderController(OrderRepository orderRepository, CartItemRepository cartItemRepository) {
+    public OrderController(OrderRepository orderRepository, CartItemRepository cartItemRepository,
+            OrderItemRepository orderItemRepository) {
         this.orderRepository = orderRepository;
         this.cartItemRepository = cartItemRepository;
+        this.orderItemRepository = orderItemRepository;
     }
 
     @GetMapping({ "orders/", "orders" })
@@ -50,7 +55,8 @@ public class OrderController {
             orderItem.setOrder(order);
             orderItem.setProduct(cartItem.getProduct());
             orderItem.setQuantity(cartItem.getQuantity());
-            order.getOrderItems().add(orderItem);
+            orderItemRepository.save(orderItem);
+            // order.getOrderItems().add(orderItem);
         }
 
         return ResponseEntity.ok("Order created successfully");
