@@ -121,7 +121,7 @@ public class ProductController {
             @RequestParam(name = "order", defaultValue = "asc") String sortOrder,
             @RequestParam(name = "page", defaultValue = "0") int page,
             @RequestParam(name = "size", defaultValue = "10") int size) {
-        Sort sort = Sort.by(Sort.Direction.fromString(sortOrder), sortField);
+        Sort sort = Sort.by(sortOrder.equalsIgnoreCase("asc") ? Sort.Order.asc(sortField) : Sort.Order.desc(sortField));
         Pageable pageable = PageRequest.of(page, size, sort);
 
         if (keyword != null) {
